@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+env/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local IDE configuration
+.vscode/
+.vscodium/
+
+# Source annual report PDFs (keep repos light)
+input_pdfs/*.pdf
+
+# System files
+Thumbs.db
+.DS_Store

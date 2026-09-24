@@ -1,0 +1,4715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sikkim Local Fund Audit — Multi-Year Comparative Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    :root {
+      --navy: #1e3a8a;
+      --navy-dark: #0f172a;
+      --gold: #f59e0b;
+      --green: #16a34a;
+      --red: #dc2626;
+      --bg: #eef2f7;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.5; }
+    .header {
+      position: sticky; top: 0; z-index: 1000;
+      background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+      color: #fff; padding: 1.1rem 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .header-title h1 { font-size: 1.45rem; font-weight: 700; }
+    .header-title p { font-size: 0.85rem; color: #cbd5e1; }
+    .nav-tabs { display: flex; gap: 0.5rem; margin-top: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .tab-btn {
+      background: transparent; border: none; color: #94a3b8;
+      padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #fff; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--gold); }
+    .container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
+    .kpi-card {
+      background: var(--card-bg); padding: 1.25rem; border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);
+    }
+    .kpi-label { font-size: 0.78rem; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .kpi-val { font-size: 1.45rem; font-weight: 700; color: var(--navy); margin: 0.25rem 0; }
+    .kpi-sub { font-size: 0.8rem; font-weight: 600; }
+    .card {
+      background: var(--card-bg); padding: 1.25rem; border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 1.5rem;
+    }
+    .table-container { overflow-x: auto; max-height: 480px; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fff; }
+    th, td { padding: 0.7rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; color: var(--navy); font-weight: 600; position: sticky; top: 0; z-index: 2; }
+    tr:hover { background-color: #f1f5f9; }
+    .text-right { text-align: right; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="header-title">
+        <h1>Sikkim Local Fund Audit — Multi-Year Comparative Suite</h1>
+        <p>Cross-Report Analytics covering CARR 2023, 2024, 2025, and 2026 | Generated: 2026-09-24 08:13:25</p>
+      </div>
+      <div>
+        <a href="carr_comparative_analysed.xlsx" download style="color:#fff; background:var(--gold); padding:0.5rem 1rem; border-radius:5px; text-decoration:none; font-size:0.85rem; font-weight:600;">Download Master Workbook</a>
+      </div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-macro')">Macro Multi-Year Trends</button>
+      <button class="tab-btn" onclick="switchTab('tab-trends')">Scheme Trajectories</button>
+      <button class="tab-btn" onclick="switchTab('tab-anomalies')">Persistent Fund Parking</button>
+      <button class="tab-btn" onclick="switchTab('tab-yoy')">YoY Matrix</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: MACRO TRENDS -->
+    <section id="tab-macro" class="tab-content active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Periods Analyzed</div>
+          <div class="kpi-val">2021-22 to 2024-25</div>
+          <div class="kpi-sub" style="color:var(--green);">4 Full Audit Cycles</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Total Receipts</div>
+          <div class="kpi-val">₹ 2,08,33,03,548.00</div>
+          <div class="kpi-sub" style="color:var(--muted);">All PRIs & Schemes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Expenditure</div>
+          <div class="kpi-val">₹ 1,04,37,17,908.00</div>
+          <div class="kpi-sub" style="color:var(--green);">50.1% Utilized</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Unspent Balance</div>
+          <div class="kpi-val">₹ 1,03,92,89,894.00</div>
+          <div class="kpi-sub" style="color:var(--red);">Unspent Balances</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Severe Parking Outliers</div>
+          <div class="kpi-val">111</div>
+          <div class="kpi-sub" style="color:var(--red);">&lt;= 20% Utilization</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="height:100%; width:100%;">                            <div id="1082d932-1a18-4159-a906-b6ad251e22d4" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("1082d932-1a18-4159-a906-b6ad251e22d4")) {                    Plotly.newPlot(                        "1082d932-1a18-4159-a906-b6ad251e22d4",                        [{"marker":{"color":"#1e3a8a"},"name":"Available Receipts","x":["2021-22","2022-23","2023-24","2024-25"],"y":{"dtype":"f8","bdata":"exQub++xwkHhegS5SSPQQTMz0\u002fQj4ttBAAAAHywL30E="},"type":"bar"},{"marker":{"color":"#16a34a"},"name":"Audited Expenditure","x":["2021-22","2022-23","2023-24","2024-25"],"y":{"dtype":"f8","bdata":"AACA8XvWskE+CtfR5mPAQQAAANTORctBAAAAiu8az0E="},"type":"bar"},{"line":{"color":"#f59e0b","width":3},"mode":"lines+markers+text","name":"Utilization %","text":["50.4%","50.8%","48.9%","50.1%"],"textposition":"top center","x":["2021-22","2022-23","2023-24","2024-25"],"y":{"dtype":"f8","bdata":"cT0K16MwSUCkcD0K12NJQDMzMzMzc0hAzczMzMwMSUA="},"yaxis":"y2","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"font":{"family":"Segoe UI, Arial, sans-serif"},"yaxis2":{"title":{"text":"Utilization %"},"overlaying":"y","side":"right","range":[0,100]},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":40,"r":40,"t":60,"b":40},"barmode":"group","title":{"text":"Multi-Year Macro Growth & Utilization Trajectory"},"yaxis":{"title":{"text":"Amount (₹)"}}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Multi-Year Macro Schedule</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Financial Year</th>
+                <th class="text-right">Total Receipts (₹)</th>
+                <th class="text-right">Total Expenditure (₹)</th>
+                <th class="text-right">Closing Balance (₹)</th>
+                <th class="text-right">Utilization Rate</th>
+                <th class="text-right">Severe Parking Count</th>
+                <th class="text-right">Audited Units</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><strong>2021-22</strong></td>
+                <td class="text-right">₹ 62,73,02,110.36</td>
+                <td class="text-right">₹ 31,60,46,321.50</td>
+                <td class="text-right">₹ 31,12,84,516.86</td>
+                <td class="text-right"><strong>50.38%</strong></td>
+                <td class="text-right" style="color:var(--red);">20</td>
+                <td class="text-right">52</td>
+              </tr>
+              
+              <tr>
+                <td><strong>2022-23</strong></td>
+                <td class="text-right">₹ 1,08,29,92,356.07</td>
+                <td class="text-right">₹ 54,99,65,219.68</td>
+                <td class="text-right">₹ 53,30,01,534.03</td>
+                <td class="text-right"><strong>50.78%</strong></td>
+                <td class="text-right" style="color:var(--red);">13</td>
+                <td class="text-right">76</td>
+              </tr>
+              
+              <tr>
+                <td><strong>2023-24</strong></td>
+                <td class="text-right">₹ 1,87,12,20,691.30</td>
+                <td class="text-right">₹ 91,51,19,528.00</td>
+                <td class="text-right">₹ 95,61,01,163.30</td>
+                <td class="text-right"><strong>48.9%</strong></td>
+                <td class="text-right" style="color:var(--red);">29</td>
+                <td class="text-right">193</td>
+              </tr>
+              
+              <tr>
+                <td><strong>2024-25</strong></td>
+                <td class="text-right">₹ 2,08,33,03,548.00</td>
+                <td class="text-right">₹ 1,04,37,17,908.00</td>
+                <td class="text-right">₹ 1,03,92,89,894.00</td>
+                <td class="text-right"><strong>50.1%</strong></td>
+                <td class="text-right" style="color:var(--red);">49</td>
+                <td class="text-right">198</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SCHEME TRAJECTORIES -->
+    <section id="tab-trends" class="tab-content">
+      <div class="card">
+        <div style="height:100%; width:100%;">                            <div id="d1a45565-03cb-4106-81c0-5223654fe95d" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("d1a45565-03cb-4106-81c0-5223654fe95d")) {                    Plotly.newPlot(                        "d1a45565-03cb-4106-81c0-5223654fe95d",                        [{"hovertemplate":"Normalized_Bucket=Grant-In-Aid \u002f Salaries\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Grant-In-Aid \u002f Salaries","line":{"color":"rgb(136, 204, 238)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"Grant-In-Aid \u002f Salaries","orientation":"v","showlegend":true,"x":["2021-22","2022-23","2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAsPE3c0EzMzPlLY2RQQAAAPyC0ZNBAAAArvx1oEE="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=Other \u002f Miscellaneous\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Other \u002f Miscellaneous","line":{"color":"rgb(204, 102, 119)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"Other \u002f Miscellaneous","orientation":"v","showlegend":true,"x":["2021-22","2022-23","2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAzJqmnUEAAAAyZvGkQQAAAED2ZFRBAAAA2GathEE="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=Own Source Revenue\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Own Source Revenue","line":{"color":"rgb(221, 204, 119)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"Own Source Revenue","orientation":"v","showlegend":true,"x":["2021-22","2022-23","2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAUH8uf0EK16PU7C6IQQAAADySR5BBAAAASOtpjkE="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=State Finance Commission\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"State Finance Commission","line":{"color":"rgb(17, 119, 51)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"State Finance Commission","orientation":"v","showlegend":true,"x":["2021-22","2022-23","2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAXdyMoEGamZnt4sutQQAAADZnw7xBAACA41o3wEE="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=14th Finance Commission\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"14th Finance Commission","line":{"color":"rgb(51, 34, 136)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"14th Finance Commission","orientation":"v","showlegend":true,"x":["2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAMrqaUEAAACAFdtKQQ=="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=15th Finance Commission\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"15th Finance Commission","line":{"color":"rgb(170, 68, 153)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"15th Finance Commission","orientation":"v","showlegend":true,"x":["2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAACg1Cr0EAAACeP+atQQ=="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=Jal Jeevan Mission\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Jal Jeevan Mission","line":{"color":"rgb(68, 170, 153)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"Jal Jeevan Mission","orientation":"v","showlegend":true,"x":["2023-24","2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAACAXUAAAAAAACjEQA=="},"yaxis":"y","type":"scatter"},{"hovertemplate":"Normalized_Bucket=Swachh Bharat Mission\u003cbr\u003eFinancial_Year=%{x}\u003cbr\u003ePayment_Expenditure=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Swachh Bharat Mission","line":{"color":"rgb(153, 153, 51)","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"Swachh Bharat Mission","orientation":"v","showlegend":true,"x":["2024-25"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAACa0EA="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Financial_Year"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Payment_Expenditure"}},"legend":{"title":{"text":"Normalized_Bucket"},"tracegroupgap":0},"title":{"text":"Scheme-Wise Expenditure Trajectories Across Audit Cycles"},"font":{"family":"Segoe UI, Arial, sans-serif"},"margin":{"l":40,"r":40,"t":50,"b":40}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FUND PARKING -->
+    <section id="tab-anomalies" class="tab-content">
+      <div class="card">
+        <div style="height:100%; width:100%;">                            <div id="8bfd8e7d-0af3-49b9-963a-5091c0ee31b5" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("8bfd8e7d-0af3-49b9-963a-5091c0ee31b5")) {                    Plotly.newPlot(                        "8bfd8e7d-0af3-49b9-963a-5091c0ee31b5",                        [{"customdata":[["Temi","Namphing","15th FC",11.86],["Temi","Ben Namprik","15th FC",14.1],["Khamdong","Khamdong","15th FC",4.42],["Melli Sumbuk","Turuk Ramabong","15th FC",14.05],["Daramdin","Upper Thambong","15th FC",10.94],["Daramdin","Lower Fambong","SFC\u002fOSR",12.86],["Daramdin","Lower Fambong","15th FC",18.29],["Temi","Temi","15th FC",15.93],["Khamdong","Dung Dung Thasa","15th FC",11.37],["Melli Sumbuk","Sumbuk Kartikey","15th FC",17.14],["Chungthang","Lachen Dzumsa","SFC",19.75],["Daramdin","Upper Thambong","SFC",15.93],["Temi","Bermiok Tokal","OSR",17.82],["Gyalshing","Singyang\nChumbung","15th FC",18.94],["Namcheybong","Assam Lingzey","15th FC",19.65],["Khamdong","Sirwani","15th FC",9.38],["Ravong","Ravong Barfung","15th FC",18.0],["Chumbung","Chumbung","15th FC",8.4],["Yuksum","Yuksum Dubdi","15th FC",11.21],["Khamdong","Chisopani","15th FC",8.29],["Mangalbaria","Takuthang\nChuchachen","15th FC",19.51],["Gyalshing","Yangthang","15th FC",9.44],["Rakdong\nTintek","Tumin","15th FC",9.97],["Tangzi Bikmat","Turung Mamring","15th FC",14.48],["Yangang","Kolthang Tokday","15th FC",8.22],["Lingi Sokpay","Niya Mangzing","15th FC",19.98],["Namthang","Namthang\nManeydara","15th FC",9.49],["Namthang","Perbing Dovan","15th FC",1.83],["Ranka","0SR","15th FC",17.83],["Namchi","Kitam Manpur","15th FC",9.56],["Namchi","Damthang","15th FC",16.63],["Baiguney","Mabong Segeng","15th FC",17.8],["Ravong","Legship","15th FC",12.05],["Namchi","Mamley","15th FC",15.95],["Melli Sumbuk","Lungchok\nKameray","15th FC",14.51],["Pakyong","Amba","15th FC",14.72],["Namchi","Bomtar","15th FC",18.88],["Rhenock","Sudunglakha","15th FC",13.27],["Namthang","Chuba Phong","15th FC",17.46],["Dentam","Bongten Sampong","15th FC",9.03]],"hovertemplate":"Financial_Year=2024-25\u003cbr\u003eTotal_Receipt=%{marker.size}\u003cbr\u003eClosing_Balance=%{y}\u003cbr\u003eBlock_Administrative_Centre=%{customdata[0]}\u003cbr\u003eEntity_Name=%{customdata[1]}\u003cbr\u003eRaw_Scheme=%{customdata[2]}\u003cbr\u003eUtilization_Pct=%{customdata[3]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2024-25","marker":{"color":"#2E91E5","size":{"dtype":"i4","bdata":"RnvDAKyMfQBz92oAyPBxAPaEZgB6RGgA8ZFkANdLXgBl0VQArRlaAHHIXACN8FUAbXpXAJewVgBknlYAIr1JAMMmTgATPEMAPwNFANV1QgBHRUsAzrlCACfRPwAQDkMApWE+AMzwRAAKDjoANaA0AH4YPAA3+DQAnbs3AIzENwD6uDMAgwQ2ACu0MwAcsDMAc8A1AMJIMQBsVDMAJZAuAA=="},"sizemode":"area","sizeref":32027.695,"symbol":"circle"},"mode":"markers","name":"2024-25","orientation":"v","showlegend":true,"x":{"dtype":"i4","bdata":"RnvDAKyMfQBz92oAyPBxAPaEZgB6RGgA8ZFkANdLXgBl0VQArRlaAHHIXACN8FUAbXpXAJewVgBknlYAIr1JAMMmTgATPEMAPwNFANV1QgBHRUsAzrlCACfRPwAQDkMApWE+AMzwRAAKDjoANaA0AH4YPAA3+DQAnbs3AIzENwD6uDMAgwQ2ACu0MwAcsDMAc8A1AMJIMQBsVDMAJZAuAA=="},"xaxis":"x","y":{"dtype":"i4","bdata":"KEusAA7aawDPO2YAnO1hAAhPWwBi21oA0y1SAJ5FTwCxK0sAcahKALh0SgB3QEgAqeJHACJGRgBRmEUAKNJCAFwVQADrlj0AQkY9AEbzPACuljwAFm48ALNzOQAYWTkAnkA5ACMqNwChizQARaozAANiMQC45y8AC3cuAADYLQBGfS0Ab2YtALUzLADrEywAXporAOW9KgCsXSoAB1wqAA=="},"yaxis":"y","type":"scatter"},{"customdata":[["CHUNG\nTHANG","LACHEN","CHUNG\nTHANG",2.4],["CHUNG\nTHANG","LACHEN","SFC\u002fGIA",17.77],["CHUNG\nTHANG","LACHEN","General",5.66],["SUMBUK","TURUK\nRAMABONG","SUMBUK\nKARTEKEY",0.0],["CHUNG\nTHANG","LACHEN","SFC",2.81],["NAMTH\nANG","RAMENG\nNIZRAMENG","KAREK\nKABREY",9.4],["KABI","NAVEY\nSHOTAK","SFC",1.86],["KHAM\nDONG","KHAMDONG","DUNG\nDUNG\nTHASA",17.26],["PASSING\nDONG","LINGTHEM\nLINGDEM","General",0.0]],"hovertemplate":"Financial_Year=2022-23\u003cbr\u003eTotal_Receipt=%{marker.size}\u003cbr\u003eClosing_Balance=%{y}\u003cbr\u003eBlock_Administrative_Centre=%{customdata[0]}\u003cbr\u003eEntity_Name=%{customdata[1]}\u003cbr\u003eRaw_Scheme=%{customdata[2]}\u003cbr\u003eUtilization_Pct=%{customdata[3]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2022-23","marker":{"color":"#E15F99","size":{"dtype":"i4","bdata":"Brl6AIjkgwDO8FAALjBIAMp9RgASO0kAHlM4ACJ3OgD9XC0A"},"sizemode":"area","sizeref":32027.695,"symbol":"circle"},"mode":"markers","name":"2022-23","orientation":"v","showlegend":true,"x":{"dtype":"i4","bdata":"Brl6AIjkgwDO8FAALjBIAMp9RgASO0kAHlM4ACJ3OgD9XC0A"},"xaxis":"x","y":{"dtype":"i4","bdata":"esV3AFZ1bADuXEwALjBIAPqBRABIWUIAkEY3AIxgMAD9XC0A"},"yaxis":"y","type":"scatter"},{"customdata":[["Melli Sumbuk","Sukrabarey\nSuntaley","15th FC",17.46],["Chungthang","Lachen\nDzumsa","15TH FC",0.98],["Daramdin","Fambong","OSR\u002fSFC\u002fGI\nA",7.57],["Chungthang","Lachen\nDzumsa","SFC",14.83],["Melli Sumbuk","Turuk\nRamabong","15TH FC",14.67],["Namthang","Kabrey\nKarek","15TH FC",5.57],["Ravangla","Ralang\nNamlung","SFC",2.13],["Khamdong","Khamdong","15thFC",19.58],["Khamdong","Dung\nDung\nThasa","15thFC",11.7],["Gyalshing","Singyang\nChumbung","SFC",16.46],["Ravangla","Ralang\nNamlung","15th FC",17.94],["Baiguney","Samsing\nPipaley","15th FC",0.0],["Pakyong","Amba","SFC",9.01],["Namchi","Tingrithan\ng","15th FC",0.0],["Baiguney","Zoom","15th FC",13.23],["Temi","Bermiok\nTokal","15TH FC",17.26],["Chungthang","Lachung\nDzumsa","15TH FC",2.12],["Chumbung","Chumbung","15TH FC",3.11]],"hovertemplate":"Financial_Year=2023-24\u003cbr\u003eTotal_Receipt=%{marker.size}\u003cbr\u003eClosing_Balance=%{y}\u003cbr\u003eBlock_Administrative_Centre=%{customdata[0]}\u003cbr\u003eEntity_Name=%{customdata[1]}\u003cbr\u003eRaw_Scheme=%{customdata[2]}\u003cbr\u003eUtilization_Pct=%{customdata[3]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2023-24","marker":{"color":"#1CA71C","size":{"dtype":"i4","bdata":"ZG1xAI\u002ftWgBpXF4A9LpcAHYiVwCvSE4Am+lCAMnsUACT\u002fTsA1+c+ANRKPgCMIDIApYk2AEIoLwDkNjIAAAkzAE8jKgBTiCoA"},"sizemode":"area","sizeref":32027.695,"symbol":"circle"},"mode":"markers","name":"2023-24","orientation":"v","showlegend":true,"x":{"dtype":"i4","bdata":"ZG1xAI\u002ftWgBpXF4A9LpcAHYiVwCvSE4Am+lCAMnsUACT\u002fTsA1+c+ANRKPgCMIDIApYk2AEIoLwDkNjIAAAkzAE8jKgBTiCoA"},"xaxis":"x","y":{"dtype":"i4","bdata":"Y59dALYIWgClN1cAvfpOAMVZSgB\u002f60kAQXxBAOUTQQAc+TQA3Iw0AJkeMwCMIDIAPJ8xAEIoLwCpkSsAgDoqAHY+KQDPNSkA"},"yaxis":"y","type":"scatter"},{"customdata":[["Dentam","Bongten","SRK",18.41],["Khamdong","Chisopani","Khamdong",0.0],["Daramdin","Mendogaon\nBorbotey","Upper\nThambong",4.02],["Duga","Budhang\nKamerey","General",0.0],["Khamdong","Chisopani","General",0.0],["Duga","West Pendam","Sumin\nLingzey",14.56],["Pakyong","Aho\nYangtam","OSR\u002fLIC\u002fMISC",13.08],["Yangtey","SBS","CANARA\nBANK",5.72],["Gyalshing","Yangthang","General",0.0],["Dentam","Sardong\nLungzik","Maneybong",0.0],["Pakyong","Amba","Tareythang",0.0],["Daramdin","Mendogaon\nBorbotey","Siktam tikpur",15.34],["Lingchom\nTikjya","Chumbung","FFC",16.9]],"hovertemplate":"Financial_Year=2021-22\u003cbr\u003eTotal_Receipt=%{marker.size}\u003cbr\u003eClosing_Balance=%{y}\u003cbr\u003eBlock_Administrative_Centre=%{customdata[0]}\u003cbr\u003eEntity_Name=%{customdata[1]}\u003cbr\u003eRaw_Scheme=%{customdata[2]}\u003cbr\u003eUtilization_Pct=%{customdata[3]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"2021-22","marker":{"color":"#FB0D0D","size":{"dtype":"i4","bdata":"rflOAIPzOwDEDD4AB5o5AJJTOQBgW0IAW+Y7AGSfNADHnC8AKKIrALLvKgD9PDIA9fYwAA=="},"sizemode":"area","sizeref":32027.695,"symbol":"circle"},"mode":"markers","name":"2021-22","orientation":"v","showlegend":true,"x":{"dtype":"i4","bdata":"rflOAIPzOwDEDD4AB5o5AJJTOQBgW0IAW+Y7AGSfNADHnC8AKKIrALLvKgD9PDIA9fYwAA=="},"xaxis":"x","y":{"dtype":"i4","bdata":"S29AAIPzOwBSjjsAB5o5AJJTOQC4sjgAoxA0ADKcMQDHnC8AFqIrALLvKgDVhyoA9K8oAA=="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Total_Receipt"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Closing_Balance"}},"legend":{"title":{"text":"Financial_Year"},"tracegroupgap":0,"itemsizing":"constant"},"title":{"text":"Severe Fund Parking Outliers (\u003e= ₹20 Lakhs, \u003c= 20% Utilized)"},"font":{"family":"Segoe UI, Arial, sans-serif"},"margin":{"l":40,"r":40,"t":50,"b":40}},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Severe Fund Parking Outliers (&gt;= ₹20 Lakhs Available, &lt;= 20% Utilized)</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>FY</th>
+                <th>BAC</th>
+                <th>Gram Panchayat</th>
+                <th>Scheme</th>
+                <th class="text-right">Available Receipts</th>
+                <th class="text-right">Expenditure</th>
+                <th class="text-right">Closing Balance</th>
+                <th class="text-right">Utilization %</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Temi</td>
+                <td><strong>Namphing</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 1,28,11,078.00</td>
+                <td class="text-right">₹ 15,19,646.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 1,12,91,432.00</td>
+                <td class="text-right"><strong>11.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>CHUNG
+THANG</td>
+                <td><strong>LACHEN</strong></td>
+                <td>CHUNG
+THANG</td>
+                <td class="text-right">₹ 80,42,758.00</td>
+                <td class="text-right">₹ 1,93,420.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 78,49,338.00</td>
+                <td class="text-right"><strong>2.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>CHUNG
+THANG</td>
+                <td><strong>LACHEN</strong></td>
+                <td>SFC/GIA</td>
+                <td class="text-right">₹ 86,43,720.00</td>
+                <td class="text-right">₹ 15,35,794.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 71,07,926.00</td>
+                <td class="text-right"><strong>17.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Temi</td>
+                <td><strong>Ben Namprik</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 82,28,012.00</td>
+                <td class="text-right">₹ 11,59,838.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 70,68,174.00</td>
+                <td class="text-right"><strong>14.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Khamdong</td>
+                <td><strong>Khamdong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 70,10,163.00</td>
+                <td class="text-right">₹ 3,10,180.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 66,99,983.00</td>
+                <td class="text-right"><strong>4.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Turuk Ramabong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 74,67,208.00</td>
+                <td class="text-right">₹ 10,49,388.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 64,17,820.00</td>
+                <td class="text-right"><strong>14.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Sukrabarey
+Suntaley</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 74,33,572.00</td>
+                <td class="text-right">₹ 12,97,921.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 61,35,651.00</td>
+                <td class="text-right"><strong>17.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Daramdin</td>
+                <td><strong>Upper Thambong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 67,18,710.00</td>
+                <td class="text-right">₹ 7,34,702.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 59,84,008.00</td>
+                <td class="text-right"><strong>10.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Daramdin</td>
+                <td><strong>Lower Fambong</strong></td>
+                <td>SFC/OSR</td>
+                <td class="text-right">₹ 68,33,274.00</td>
+                <td class="text-right">₹ 8,78,872.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 59,54,402.00</td>
+                <td class="text-right"><strong>12.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Chungthang</td>
+                <td><strong>Lachen
+Dzumsa</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 59,59,055.00</td>
+                <td class="text-right">₹ 58,585.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 59,00,470.00</td>
+                <td class="text-right"><strong>1.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Daramdin</td>
+                <td><strong>Fambong</strong></td>
+                <td>OSR/SFC/GI
+A</td>
+                <td class="text-right">₹ 61,84,041.00</td>
+                <td class="text-right">₹ 4,68,164.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 57,15,877.00</td>
+                <td class="text-right"><strong>7.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Daramdin</td>
+                <td><strong>Lower Fambong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 65,90,961.00</td>
+                <td class="text-right">₹ 12,05,278.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 53,85,683.00</td>
+                <td class="text-right"><strong>18.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Temi</td>
+                <td><strong>Temi</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 61,79,799.00</td>
+                <td class="text-right">₹ 9,84,633.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 51,95,166.00</td>
+                <td class="text-right"><strong>15.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Chungthang</td>
+                <td><strong>Lachen
+Dzumsa</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 60,77,172.00</td>
+                <td class="text-right">₹ 9,01,175.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 51,75,997.00</td>
+                <td class="text-right"><strong>14.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>CHUNG
+THANG</td>
+                <td><strong>LACHEN</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 53,04,526.00</td>
+                <td class="text-right">₹ 3,00,000.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 50,04,526.00</td>
+                <td class="text-right"><strong>5.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Khamdong</td>
+                <td><strong>Dung Dung Thasa</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 55,58,629.00</td>
+                <td class="text-right">₹ 6,32,244.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 49,26,385.00</td>
+                <td class="text-right"><strong>11.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Sumbuk Kartikey</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 59,04,813.00</td>
+                <td class="text-right">₹ 10,12,028.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 48,92,785.00</td>
+                <td class="text-right"><strong>17.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Chungthang</td>
+                <td><strong>Lachen Dzumsa</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 60,80,625.00</td>
+                <td class="text-right">₹ 12,01,081.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 48,79,544.00</td>
+                <td class="text-right"><strong>19.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Turuk
+Ramabong</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 57,10,454.00</td>
+                <td class="text-right">₹ 8,37,809.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 48,72,645.00</td>
+                <td class="text-right"><strong>14.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Namthang</td>
+                <td><strong>Kabrey
+Karek</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 51,30,415.00</td>
+                <td class="text-right">₹ 2,86,000.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 48,44,415.00</td>
+                <td class="text-right"><strong>5.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Daramdin</td>
+                <td><strong>Upper Thambong</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 56,32,141.00</td>
+                <td class="text-right">₹ 8,97,046.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 47,35,095.00</td>
+                <td class="text-right"><strong>15.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>SUMBUK</td>
+                <td><strong>TURUK
+RAMABONG</strong></td>
+                <td>SUMBUK
+KARTEKEY</td>
+                <td class="text-right">₹ 47,30,926.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 47,30,926.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Temi</td>
+                <td><strong>Bermiok Tokal</strong></td>
+                <td>OSR</td>
+                <td class="text-right">₹ 57,32,973.00</td>
+                <td class="text-right">₹ 10,21,892.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 47,11,081.00</td>
+                <td class="text-right"><strong>17.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Gyalshing</td>
+                <td><strong>Singyang
+Chumbung</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 56,81,303.00</td>
+                <td class="text-right">₹ 10,75,829.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 46,05,474.00</td>
+                <td class="text-right"><strong>18.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namcheybong</td>
+                <td><strong>Assam Lingzey</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 56,76,644.00</td>
+                <td class="text-right">₹ 11,15,667.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 45,60,977.00</td>
+                <td class="text-right"><strong>19.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>CHUNG
+THANG</td>
+                <td><strong>LACHEN</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 46,19,722.00</td>
+                <td class="text-right">₹ 1,30,000.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 44,89,722.00</td>
+                <td class="text-right"><strong>2.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Khamdong</td>
+                <td><strong>Sirwani</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 48,32,546.00</td>
+                <td class="text-right">₹ 4,53,370.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 43,79,176.00</td>
+                <td class="text-right"><strong>9.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>NAMTH
+ANG</td>
+                <td><strong>RAMENG
+NIZRAMENG</strong></td>
+                <td>KAREK
+KABREY</td>
+                <td class="text-right">₹ 47,99,250.00</td>
+                <td class="text-right">₹ 4,51,018.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 43,48,232.00</td>
+                <td class="text-right"><strong>9.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Ravangla</td>
+                <td><strong>Ralang
+Namlung</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 43,85,179.00</td>
+                <td class="text-right">₹ 93,530.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 42,91,649.00</td>
+                <td class="text-right"><strong>2.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Khamdong</td>
+                <td><strong>Khamdong</strong></td>
+                <td>15thFC</td>
+                <td class="text-right">₹ 53,03,497.00</td>
+                <td class="text-right">₹ 10,38,564.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 42,64,933.00</td>
+                <td class="text-right"><strong>19.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Dentam</td>
+                <td><strong>Bongten</strong></td>
+                <td>SRK</td>
+                <td class="text-right">₹ 51,75,725.00</td>
+                <td class="text-right">₹ 9,52,930.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 42,22,795.00</td>
+                <td class="text-right"><strong>18.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Ravong</td>
+                <td><strong>Ravong Barfung</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 51,21,731.00</td>
+                <td class="text-right">₹ 9,21,959.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 41,99,772.00</td>
+                <td class="text-right"><strong>18.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Chumbung</td>
+                <td><strong>Chumbung</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 44,06,291.00</td>
+                <td class="text-right">₹ 3,69,960.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 40,36,331.00</td>
+                <td class="text-right"><strong>8.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Yuksum</td>
+                <td><strong>Yuksum Dubdi</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 45,22,815.00</td>
+                <td class="text-right">₹ 5,07,133.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 40,15,682.00</td>
+                <td class="text-right"><strong>11.2%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Khamdong</td>
+                <td><strong>Chisopani</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 43,55,541.00</td>
+                <td class="text-right">₹ 3,61,103.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 39,94,438.00</td>
+                <td class="text-right"><strong>8.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Mangalbaria</td>
+                <td><strong>Takuthang
+Chuchachen</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 49,32,935.00</td>
+                <td class="text-right">₹ 9,62,201.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 39,70,734.00</td>
+                <td class="text-right"><strong>19.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Gyalshing</td>
+                <td><strong>Yangthang</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 43,72,942.00</td>
+                <td class="text-right">₹ 4,12,600.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 39,60,342.00</td>
+                <td class="text-right"><strong>9.4%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Khamdong</td>
+                <td><strong>Chisopani</strong></td>
+                <td>Khamdong</td>
+                <td class="text-right">₹ 39,28,963.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 39,28,963.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Daramdin</td>
+                <td><strong>Mendogaon
+Borbotey</strong></td>
+                <td>Upper
+Thambong</td>
+                <td class="text-right">₹ 40,66,500.00</td>
+                <td class="text-right">₹ 1,63,442.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 39,03,058.00</td>
+                <td class="text-right"><strong>4.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Duga</td>
+                <td><strong>Budhang
+Kamerey</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 37,74,983.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,74,983.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Rakdong
+Tintek</td>
+                <td><strong>Tumin</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 41,82,311.00</td>
+                <td class="text-right">₹ 4,17,140.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,65,171.00</td>
+                <td class="text-right"><strong>10.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Tangzi Bikmat</td>
+                <td><strong>Turung Mamring</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 43,94,512.00</td>
+                <td class="text-right">₹ 6,36,152.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,58,360.00</td>
+                <td class="text-right"><strong>14.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Khamdong</td>
+                <td><strong>Chisopani</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 37,56,946.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,56,946.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Yangang</td>
+                <td><strong>Kolthang Tokday</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 40,88,229.00</td>
+                <td class="text-right">₹ 3,36,135.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,52,094.00</td>
+                <td class="text-right"><strong>8.2%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Duga</td>
+                <td><strong>West Pendam</strong></td>
+                <td>Sumin
+Lingzey</td>
+                <td class="text-right">₹ 43,48,768.00</td>
+                <td class="text-right">₹ 6,33,000.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 37,15,768.00</td>
+                <td class="text-right"><strong>14.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>KABI</td>
+                <td><strong>NAVEY
+SHOTAK</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 36,91,294.00</td>
+                <td class="text-right">₹ 68,750.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 36,22,544.00</td>
+                <td class="text-right"><strong>1.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Lingi Sokpay</td>
+                <td><strong>Niya Mangzing</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 45,18,092.00</td>
+                <td class="text-right">₹ 9,02,825.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 36,15,267.00</td>
+                <td class="text-right"><strong>20.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Khamdong</td>
+                <td><strong>Dung
+Dung
+Thasa</strong></td>
+                <td>15thFC</td>
+                <td class="text-right">₹ 39,31,539.00</td>
+                <td class="text-right">₹ 4,59,895.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 34,71,644.00</td>
+                <td class="text-right"><strong>11.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Gyalshing</td>
+                <td><strong>Singyang
+Chumbung</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 41,22,583.00</td>
+                <td class="text-right">₹ 6,78,651.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 34,43,932.00</td>
+                <td class="text-right"><strong>16.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namthang</td>
+                <td><strong>Namthang
+Maneydara</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 38,04,682.00</td>
+                <td class="text-right">₹ 3,61,065.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 34,43,617.00</td>
+                <td class="text-right"><strong>9.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Pakyong</td>
+                <td><strong>Aho
+Yangtam</strong></td>
+                <td>OSR/LIC/MISC</td>
+                <td class="text-right">₹ 39,25,595.00</td>
+                <td class="text-right">₹ 5,13,464.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 34,12,131.00</td>
+                <td class="text-right"><strong>13.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namthang</td>
+                <td><strong>Perbing Dovan</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 34,48,885.00</td>
+                <td class="text-right">₹ 62,960.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 33,85,925.00</td>
+                <td class="text-right"><strong>1.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Ravangla</td>
+                <td><strong>Ralang
+Namlung</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 40,82,388.00</td>
+                <td class="text-right">₹ 7,32,219.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 33,50,169.00</td>
+                <td class="text-right"><strong>17.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Baiguney</td>
+                <td><strong>Samsing
+Pipaley</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 32,85,132.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 32,85,132.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Pakyong</td>
+                <td><strong>Amba</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 35,74,181.00</td>
+                <td class="text-right">₹ 3,22,153.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 32,52,028.00</td>
+                <td class="text-right"><strong>9.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Yangtey</td>
+                <td><strong>SBS</strong></td>
+                <td>CANARA
+BANK</td>
+                <td class="text-right">₹ 34,48,676.00</td>
+                <td class="text-right">₹ 1,97,426.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 32,51,250.00</td>
+                <td class="text-right"><strong>5.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Ranka</td>
+                <td><strong>0SR</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 39,38,430.00</td>
+                <td class="text-right">₹ 7,02,075.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 32,36,355.00</td>
+                <td class="text-right"><strong>17.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>KHAM
+DONG</td>
+                <td><strong>KHAMDONG</strong></td>
+                <td>DUNG
+DUNG
+THASA</td>
+                <td class="text-right">₹ 38,31,586.00</td>
+                <td class="text-right">₹ 6,61,142.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 31,70,444.00</td>
+                <td class="text-right"><strong>17.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namchi</td>
+                <td><strong>Kitam Manpur</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 34,71,415.00</td>
+                <td class="text-right">₹ 3,31,903.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 31,39,512.00</td>
+                <td class="text-right"><strong>9.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Gyalshing</td>
+                <td><strong>Yangthang</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 31,20,327.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 31,20,327.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Namchi</td>
+                <td><strong>Tingrithan
+g</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 30,90,498.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 30,90,498.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namchi</td>
+                <td><strong>Damthang</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 36,52,509.00</td>
+                <td class="text-right">₹ 6,07,378.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 30,45,131.00</td>
+                <td class="text-right"><strong>16.6%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Baiguney</td>
+                <td><strong>Mabong Segeng</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 36,54,796.00</td>
+                <td class="text-right">₹ 6,50,380.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 30,04,416.00</td>
+                <td class="text-right"><strong>17.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Ravong</td>
+                <td><strong>Legship</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 33,89,690.00</td>
+                <td class="text-right">₹ 4,08,500.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 29,81,190.00</td>
+                <td class="text-right"><strong>12.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namchi</td>
+                <td><strong>Mamley</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 35,40,099.00</td>
+                <td class="text-right">₹ 5,64,756.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 29,75,343.00</td>
+                <td class="text-right"><strong>15.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>PASSING
+DONG</td>
+                <td><strong>LINGTHEM
+LINGDEM</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 29,72,925.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 29,72,925.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Lungchok
+Kameray</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 33,88,459.00</td>
+                <td class="text-right">₹ 4,91,638.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,96,821.00</td>
+                <td class="text-right"><strong>14.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Pakyong</td>
+                <td><strong>Amba</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 33,87,420.00</td>
+                <td class="text-right">₹ 4,98,737.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,88,683.00</td>
+                <td class="text-right"><strong>14.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Dentam</td>
+                <td><strong>Sardong
+Lungzik</strong></td>
+                <td>Maneybong</td>
+                <td class="text-right">₹ 28,59,560.00</td>
+                <td class="text-right">₹ 18.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,59,542.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namchi</td>
+                <td><strong>Bomtar</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 35,22,675.00</td>
+                <td class="text-right">₹ 6,65,109.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,57,566.00</td>
+                <td class="text-right"><strong>18.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Baiguney</td>
+                <td><strong>Zoom</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 32,90,852.00</td>
+                <td class="text-right">₹ 4,35,515.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,55,337.00</td>
+                <td class="text-right"><strong>13.2%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Pakyong</td>
+                <td><strong>Amba</strong></td>
+                <td>Tareythang</td>
+                <td class="text-right">₹ 28,13,874.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,13,874.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Rhenock</td>
+                <td><strong>Sudunglakha</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 32,29,890.00</td>
+                <td class="text-right">₹ 4,28,765.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 28,01,125.00</td>
+                <td class="text-right"><strong>13.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Daramdin</td>
+                <td><strong>Mendogaon
+Borbotey</strong></td>
+                <td>Siktam tikpur</td>
+                <td class="text-right">₹ 32,92,413.00</td>
+                <td class="text-right">₹ 5,05,128.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,87,285.00</td>
+                <td class="text-right"><strong>15.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Namthang</td>
+                <td><strong>Chuba Phong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 33,63,948.00</td>
+                <td class="text-right">₹ 5,87,456.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,76,492.00</td>
+                <td class="text-right"><strong>17.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Dentam</td>
+                <td><strong>Bongten Sampong</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 30,51,557.00</td>
+                <td class="text-right">₹ 2,75,486.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,76,071.00</td>
+                <td class="text-right"><strong>9.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Temi</td>
+                <td><strong>Bermiok
+Tokal</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 33,44,640.00</td>
+                <td class="text-right">₹ 5,77,152.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,67,488.00</td>
+                <td class="text-right"><strong>17.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Chungthang</td>
+                <td><strong>Lachung
+Dzumsa</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 27,61,551.00</td>
+                <td class="text-right">₹ 58,585.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,02,966.00</td>
+                <td class="text-right"><strong>2.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Chumbung</td>
+                <td><strong>Chumbung</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 27,87,411.00</td>
+                <td class="text-right">₹ 86,660.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 27,00,751.00</td>
+                <td class="text-right"><strong>3.1%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Lingchom
+Tikjya</td>
+                <td><strong>Chumbung</strong></td>
+                <td>FFC</td>
+                <td class="text-right">₹ 32,08,949.00</td>
+                <td class="text-right">₹ 5,42,465.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 26,66,484.00</td>
+                <td class="text-right"><strong>16.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>NAMCHI</td>
+                <td><strong>SOROK
+SHYAMPANI</strong></td>
+                <td>TINGRI
+THANG</td>
+                <td class="text-right">₹ 26,14,562.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 26,14,562.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>REGU</td>
+                <td><strong>REGU</strong></td>
+                <td>General</td>
+                <td class="text-right">₹ 32,26,219.00</td>
+                <td class="text-right">₹ 6,12,208.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 26,14,011.00</td>
+                <td class="text-right"><strong>19.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Pakyong</td>
+                <td><strong>Amba</strong></td>
+                <td>Taza</td>
+                <td class="text-right">₹ 26,09,888.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 26,09,888.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Ranka</td>
+                <td><strong>Ranka</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 30,15,564.00</td>
+                <td class="text-right">₹ 4,27,791.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 25,87,773.00</td>
+                <td class="text-right"><strong>14.2%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Hee Martam</td>
+                <td><strong>Pecherek Hee
+Patal</strong></td>
+                <td>5th SFC</td>
+                <td class="text-right">₹ 30,52,236.00</td>
+                <td class="text-right">₹ 4,86,396.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 25,65,840.00</td>
+                <td class="text-right"><strong>15.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Daramdin</td>
+                <td><strong>Dodak</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 25,48,137.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 25,48,137.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Khamdong</td>
+                <td><strong>Chisopani</strong></td>
+                <td>Dung dung
+Thasa</td>
+                <td class="text-right">₹ 29,94,211.00</td>
+                <td class="text-right">₹ 5,54,160.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 24,40,051.00</td>
+                <td class="text-right"><strong>18.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Soreng</td>
+                <td><strong>Singling</strong></td>
+                <td>Timburbung</td>
+                <td class="text-right">₹ 29,47,201.00</td>
+                <td class="text-right">₹ 5,10,221.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 24,36,980.00</td>
+                <td class="text-right"><strong>17.3%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Daramdin</td>
+                <td><strong>Ribdi Bhareng</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 28,88,897.00</td>
+                <td class="text-right">₹ 4,56,486.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 24,32,411.00</td>
+                <td class="text-right"><strong>15.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2022-23</td>
+                <td>SORENG</td>
+                <td><strong>TIKPUR</strong></td>
+                <td>SFC/
+OSR</td>
+                <td class="text-right">₹ 28,74,594.00</td>
+                <td class="text-right">₹ 4,88,567.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 23,86,027.00</td>
+                <td class="text-right"><strong>17.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Rhenock</td>
+                <td><strong>Tarpin</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 29,42,293.00</td>
+                <td class="text-right">₹ 5,82,131.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 23,60,162.00</td>
+                <td class="text-right"><strong>19.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Daramdin</td>
+                <td><strong>Mendogaon
+Borbotey</strong></td>
+                <td>Okhrey</td>
+                <td class="text-right">₹ 23,37,561.00</td>
+                <td class="text-right">₹ 72.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 23,37,489.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Chumbung</td>
+                <td><strong>Chakung</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 26,42,036.00</td>
+                <td class="text-right">₹ 3,07,731.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 23,34,305.00</td>
+                <td class="text-right"><strong>11.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Pakyong</td>
+                <td><strong>Taza</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 25,66,637.00</td>
+                <td class="text-right">₹ 2,78,890.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 22,87,747.00</td>
+                <td class="text-right"><strong>10.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Melli Sumbuk</td>
+                <td><strong>Sadam Rabitar</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 22,61,804.00</td>
+                <td class="text-right">₹ 0.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 22,61,804.00</td>
+                <td class="text-right"><strong>0.0%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Namchi</td>
+                <td><strong>Kitam
+Manpur</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 25,93,914.00</td>
+                <td class="text-right">₹ 3,33,529.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 22,60,385.00</td>
+                <td class="text-right"><strong>12.9%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Kabi</td>
+                <td><strong>Kyongnosl
+a</strong></td>
+                <td>SFC</td>
+                <td class="text-right">₹ 27,72,290.00</td>
+                <td class="text-right">₹ 5,12,993.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 22,59,297.00</td>
+                <td class="text-right"><strong>18.5%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2021-22</td>
+                <td>Pakyong</td>
+                <td><strong>Amba</strong></td>
+                <td>OSR</td>
+                <td class="text-right">₹ 26,23,995.00</td>
+                <td class="text-right">₹ 4,12,443.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 22,11,552.00</td>
+                <td class="text-right"><strong>15.7%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2024-25</td>
+                <td>Arithang
+Chongrang</td>
+                <td><strong>Dhupidara
+Narkhola</strong></td>
+                <td>15th FC</td>
+                <td class="text-right">₹ 23,89,642.00</td>
+                <td class="text-right">₹ 3,06,476.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 20,83,166.00</td>
+                <td class="text-right"><strong>12.8%</strong></td>
+              </tr>
+              
+              <tr>
+                <td>2023-24</td>
+                <td>Kabi</td>
+                <td><strong>Kyongnosl
+a</strong></td>
+                <td>15TH FC</td>
+                <td class="text-right">₹ 23,44,544.00</td>
+                <td class="text-right">₹ 2,81,846.00</td>
+                <td class="text-right" style="color:var(--red);">₹ 20,62,698.00</td>
+                <td class="text-right"><strong>12.0%</strong></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: YOY MATRIX -->
+    <section id="tab-yoy" class="tab-content">
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Gram Panchayat Expenditure YoY Schedule (Sample 100 Rows)</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                
+                <th>Block_Administrative_Centre</th>
+                
+                <th>Entity_Name</th>
+                
+                <th>Normalized_Bucket</th>
+                
+                <th>2021-22</th>
+                
+                <th>2022-23</th>
+                
+                <th>2023-24</th>
+                
+                <th>2024-25</th>
+                
+                <th>Delta_2021-22_to_2022-23</th>
+                
+                <th>PctChange_2021-22_to_2022-23</th>
+                
+                <th>Delta_2022-23_to_2023-24</th>
+                
+                <th>PctChange_2022-23_to_2023-24</th>
+                
+                <th>Delta_2023-24_to_2024-25</th>
+                
+                <th>PctChange_2023-24_to_2024-25</th>
+                
+                <th>CAGR_Pct</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                
+                <td>1.</td>
+                
+                <td>Gram Panchayat Unit</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 185.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 185.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>2.</td>
+                
+                <td>Zilla Panchayat</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 4.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 4.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>3.</td>
+                
+                <td>Nagar Panchayat</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 4.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 4.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>4.</td>
+                
+                <td>Municipal Council</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>5.</td>
+                
+                <td>Municipal Corporation</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 1.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 1.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>GE COLLECTI</td>
+                
+                <td>Grant-In-Aid / Salaries</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,63,829.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 14,63,829.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>GE COLLECTI</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 11,10,828.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 11,10,828.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>GE COLLECTI</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 8,59,774.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 8,59,774.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>GE COLLECTI</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,87,896.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 14,87,896.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>Tharpu</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 5,97,328.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 5,97,328.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>Tharpu</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 18,17,404.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 18,17,404.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>Upper Timburbung</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 8,12,043.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 8,12,043.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>A</td>
+                
+                <td>Upper Timburbung</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 11,13,354.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 11,13,354.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,77,267.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 14,77,267.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 14,77,267.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 2,84,174.00</td>
+                
+                <td>₹ 4,49,548.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 2,84,174.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,65,374.00</td>
+                
+                <td>58.2%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 32,44,420.00</td>
+                
+                <td>₹ 37,22,314.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 32,44,420.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 4,77,894.00</td>
+                
+                <td>14.7%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Dhupidara
+Narkhola</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 15,24,515.00</td>
+                
+                <td>₹ 3,06,476.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 15,24,515.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 12,18,039.00</td>
+                
+                <td>-79.9%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Dhupidara
+Narkhola</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,21,259.00</td>
+                
+                <td>₹ 23,37,520.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,21,259.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 22,16,261.00</td>
+                
+                <td>1827.7%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Dhupidara
+Narkhola</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 24,21,870.00</td>
+                
+                <td>₹ 3,22,256.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 24,21,870.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 20,99,614.00</td>
+                
+                <td>-86.7%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang
+Labing</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 12,87,568.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 12,87,568.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 12,87,568.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang
+Labing</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,43,778.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 4,43,778.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,43,778.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang
+Labing</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 37,32,178.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 37,32,178.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 37,32,178.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang Labing</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 11,96,036.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 11,96,036.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang Labing</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 791.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 791.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Gerethang Labing</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 48,88,095.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 48,88,095.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee
+Mangnam</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,83,485.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 4,83,485.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,83,485.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee
+Mangnam</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,37,491.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,37,491.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 1,37,491.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee
+Mangnam</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 23,02,289.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 23,02,289.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 23,02,289.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee Mangnam</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 20,000.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 20,000.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee Mangnam</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 44,258.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 44,258.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Karjee Mangnam</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 25,86,142.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 25,86,142.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri
+Labdang</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 2,26,271.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 2,26,271.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 2,26,271.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri
+Labdang</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,60,881.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,60,881.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 1,60,881.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri
+Labdang</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 23,76,126.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 23,76,126.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 23,76,126.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri Labdang</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 6,59,763.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 6,59,763.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri Labdang</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,01,059.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,01,059.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Kongri Labdang</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 35,16,711.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 35,16,711.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Tashiding</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 31,67,994.00</td>
+                
+                <td>₹ 38,17,566.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 31,67,994.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 6,49,572.00</td>
+                
+                <td>20.5%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Tashiding</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 6,86,270.00</td>
+                
+                <td>₹ 77,760.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 6,86,270.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 6,08,510.00</td>
+                
+                <td>-88.7%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Arithang
+Chongrang</td>
+                
+                <td>Tashiding</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 24,62,465.00</td>
+                
+                <td>₹ 49,42,993.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 24,62,465.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 24,80,528.00</td>
+                
+                <td>100.7%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling
+Baiguney</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,70,199.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 4,70,199.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,70,199.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling
+Baiguney</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 76,77,495.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 76,77,495.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling
+Baiguney</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 10,57,933.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,95,506.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 10,57,933.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 1,95,506.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 1,95,506.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling
+Baiguney</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 21,13,240.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 31,65,308.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 21,13,240.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 31,65,308.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 31,65,308.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling Baiguney</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 9,45,651.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 9,45,651.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling Baiguney</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 85,021.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 85,021.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Gelling Baiguney</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 35,43,369.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 35,43,369.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong
+Segeg</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 7,32,226.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 7,32,226.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 7,32,226.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong
+Segeg</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 7,26,854.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 7,26,854.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 7,26,854.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong
+Segeg</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 13,07,174.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 13,07,174.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 13,07,174.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong Segeng</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 6,50,380.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 6,50,380.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong Segeng</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 20,28,551.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 20,28,551.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Mabong Segeng</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 23,22,729.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 23,22,729.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Samsing
+Pipaley</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Samsing
+Pipaley</td>
+                
+                <td>Grant-In-Aid / Salaries</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 29,47,009.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 29,47,009.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 29,47,009.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Samsing
+Pipaley</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 1,20,343.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 1,20,343.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 1,20,343.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Samsing
+Pipaley</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 17,77,629.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 17,77,629.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 17,77,629.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Zoom</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,35,515.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 4,35,515.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,35,515.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Zoom</td>
+                
+                <td>Grant-In-Aid / Salaries</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 24,32,948.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 24,32,948.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 24,32,948.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Baiguney</td>
+                
+                <td>Zoom</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 15,58,553.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 15,58,553.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 15,58,553.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>CHOTA
+SAMDONG
+GPU</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 19,65,232.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 19,65,232.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 19,65,232.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>CHOTA
+SAMDONG
+GPU</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 56,820.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 56,820.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 56,820.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>CHOTA
+SAMDONG
+GPU</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 20,51,426.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 20,51,426.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 20,51,426.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>MENDO
+GAON
+BERBOTEY</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 28,80,185.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 28,80,185.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 28,80,185.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>MENDO
+GAON
+BERBOTEY</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 3,76,872.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 3,76,872.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 3,76,872.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHAKUNG</td>
+                
+                <td>MENDO
+GAON
+BERBOTEY</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 80,89,728.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 80,89,728.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 80,89,728.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>LACHEN</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,93,420.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,93,420.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,93,420.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>LACHEN</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,74,293.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 4,74,293.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 4,74,293.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>LACHEN</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 16,65,794.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 16,65,794.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 16,65,794.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>SHIPGYAR</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,65,847.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,65,847.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 14,65,847.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>SHIPGYAR</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,61,441.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 14,61,441.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 14,61,441.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>CHUNG
+THANG</td>
+                
+                <td>SHIPGYAR</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 18,82,998.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 18,82,998.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 18,82,998.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakhung</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 98,26,416.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 98,26,416.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakhung</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 2,14,200.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-₹ 2,14,200.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakung</td>
+                
+                <td>14th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 26,05,437.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 26,05,437.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 26,05,437.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakung</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 3,07,731.00</td>
+                
+                <td>₹ 16,56,184.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 3,07,731.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 13,48,453.00</td>
+                
+                <td>438.2%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakung</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 3,81,954.00</td>
+                
+                <td>₹ 1,89,959.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 3,81,954.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 1,91,995.00</td>
+                
+                <td>-50.3%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chakung</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 42,78,156.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 42,78,156.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamd
+ong</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 9,31,282.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 9,31,282.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 9,31,282.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamd
+ong</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 60,000.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 60,000.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 60,000.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamd
+ong</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 26,80,119.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 26,80,119.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 26,80,119.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamdong</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamdong</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 47,358.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 47,358.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chotasamdong</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 43,79,417.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 43,79,417.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chumbung</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 86,660.00</td>
+                
+                <td>₹ 3,69,960.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 86,660.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 2,83,300.00</td>
+                
+                <td>326.9%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chumbung</td>
+                
+                <td>Grant-In-Aid / Salaries</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 38,04,381.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 38,04,381.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chumbung</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 81,060.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 81,060.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Chumbung</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 22,06,967.00</td>
+                
+                <td>₹ 1,33,247.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 22,06,967.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 20,73,720.00</td>
+                
+                <td>-94.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogao
+n Borbotey</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 2,56,067.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 2,56,067.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 2,56,067.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogao
+n Borbotey</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 41,287.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 41,287.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 41,287.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogao
+n Borbotey</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 21,63,952.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 21,63,952.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 21,63,952.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogaon
+Borbotey</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 3,48,946.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 3,48,946.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogaon
+Borbotey</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 10,000.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 10,000.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogaon
+Borbotey</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 2,31,512.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 2,31,512.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chumbung</td>
+                
+                <td>Mendogaon
+Borbotey</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 31,20,773.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 31,20,773.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chungthang</td>
+                
+                <td>Chungthan
+g</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 55,07,069.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 55,07,069.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 55,07,069.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chungthang</td>
+                
+                <td>Chungthan
+g</td>
+                
+                <td>Own Source Revenue</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 66,500.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 66,500.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 66,500.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chungthang</td>
+                
+                <td>Chungthan
+g</td>
+                
+                <td>State Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 41,64,645.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 41,64,645.00</td>
+                
+                <td>-</td>
+                
+                <td>-₹ 41,64,645.00</td>
+                
+                <td>-100.0%</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chungthang</td>
+                
+                <td>Chungthang</td>
+                
+                <td>15th Finance Commission</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 27,50,463.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 27,50,463.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+              <tr>
+                
+                <td>Chungthang</td>
+                
+                <td>Chungthang</td>
+                
+                <td>Other / Miscellaneous</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>₹ 0.00</td>
+                
+                <td>-</td>
+                
+                <td>-</td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      event.currentTarget.classList.add('active');
+      window.dispatchEvent(new Event('resize'));
+    }
+  </script>
+</body>
+</html>

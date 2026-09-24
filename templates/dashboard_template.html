@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sikkim Local Fund Audit — Multi-Year Comparative Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    :root {
+      --navy: #1e3a8a;
+      --navy-dark: #0f172a;
+      --gold: #f59e0b;
+      --green: #16a34a;
+      --red: #dc2626;
+      --bg: #eef2f7;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.5; }
+    .header {
+      position: sticky; top: 0; z-index: 1000;
+      background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+      color: #fff; padding: 1.1rem 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .header-title h1 { font-size: 1.45rem; font-weight: 700; }
+    .header-title p { font-size: 0.85rem; color: #cbd5e1; }
+    .nav-tabs { display: flex; gap: 0.5rem; margin-top: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .tab-btn {
+      background: transparent; border: none; color: #94a3b8;
+      padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #fff; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--gold); }
+    .container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
+    .kpi-card {
+      background: var(--card-bg); padding: 1.25rem; border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);
+    }
+    .kpi-label { font-size: 0.78rem; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .kpi-val { font-size: 1.45rem; font-weight: 700; color: var(--navy); margin: 0.25rem 0; }
+    .kpi-sub { font-size: 0.8rem; font-weight: 600; }
+    .card {
+      background: var(--card-bg); padding: 1.25rem; border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 1.5rem;
+    }
+    .table-container { overflow-x: auto; max-height: 480px; border: 1px solid var(--border); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fff; }
+    th, td { padding: 0.7rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; color: var(--navy); font-weight: 600; position: sticky; top: 0; z-index: 2; }
+    tr:hover { background-color: #f1f5f9; }
+    .text-right { text-align: right; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="header-title">
+        <h1>Sikkim Local Fund Audit — Multi-Year Comparative Suite</h1>
+        <p>Cross-Report Analytics covering CARR 2023, 2024, 2025, and 2026 | Generated: {{ generated_at }}</p>
+      </div>
+      <div>
+        <a href="carr_comparative_analysed.xlsx" download style="color:#fff; background:var(--gold); padding:0.5rem 1rem; border-radius:5px; text-decoration:none; font-size:0.85rem; font-weight:600;">Download Master Workbook</a>
+      </div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-macro')">Macro Multi-Year Trends</button>
+      <button class="tab-btn" onclick="switchTab('tab-trends')">Scheme Trajectories</button>
+      <button class="tab-btn" onclick="switchTab('tab-anomalies')">Persistent Fund Parking</button>
+      <button class="tab-btn" onclick="switchTab('tab-yoy')">YoY Matrix</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: MACRO TRENDS -->
+    <section id="tab-macro" class="tab-content active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Periods Analyzed</div>
+          <div class="kpi-val">{{ kpis.years_span }}</div>
+          <div class="kpi-sub" style="color:var(--green);">4 Full Audit Cycles</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Total Receipts</div>
+          <div class="kpi-val">{{ kpis.latest_receipts }}</div>
+          <div class="kpi-sub" style="color:var(--muted);">All PRIs & Schemes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Expenditure</div>
+          <div class="kpi-val">{{ kpis.latest_expenditure }}</div>
+          <div class="kpi-sub" style="color:var(--green);">{{ kpis.latest_util_pct }}% Utilized</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Latest Unspent Balance</div>
+          <div class="kpi-val">{{ kpis.latest_cb }}</div>
+          <div class="kpi-sub" style="color:var(--red);">Unspent Balances</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Severe Parking Outliers</div>
+          <div class="kpi-val">{{ kpis.parking_count }}</div>
+          <div class="kpi-sub" style="color:var(--red);">&lt;= 20% Utilization</div>
+        </div>
+      </div>
+
+      <div class="card">
+        {{ chart_macro | safe }}
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Multi-Year Macro Schedule</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Financial Year</th>
+                <th class="text-right">Total Receipts (₹)</th>
+                <th class="text-right">Total Expenditure (₹)</th>
+                <th class="text-right">Closing Balance (₹)</th>
+                <th class="text-right">Utilization Rate</th>
+                <th class="text-right">Severe Parking Count</th>
+                <th class="text-right">Audited Units</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in macro_table %}
+              <tr>
+                <td><strong>{{ row.Financial_Year }}</strong></td>
+                <td class="text-right">{{ row.Total_Receipts }}</td>
+                <td class="text-right">{{ row.Total_Expenditure }}</td>
+                <td class="text-right">{{ row.Closing_Unspent_Balance }}</td>
+                <td class="text-right"><strong>{{ row.Fund_Utilization_Pct }}%</strong></td>
+                <td class="text-right" style="color:var(--red);">{{ row.Severe_Fund_Parking_Count }}</td>
+                <td class="text-right">{{ row.Total_Audit_Units }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SCHEME TRAJECTORIES -->
+    <section id="tab-trends" class="tab-content">
+      <div class="card">
+        {{ chart_scheme | safe }}
+      </div>
+    </section>
+
+    <!-- TAB 3: FUND PARKING -->
+    <section id="tab-anomalies" class="tab-content">
+      <div class="card">
+        {{ chart_parking | safe }}
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Severe Fund Parking Outliers (&gt;= ₹20 Lakhs Available, &lt;= 20% Utilized)</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>FY</th>
+                <th>BAC</th>
+                <th>Gram Panchayat</th>
+                <th>Scheme</th>
+                <th class="text-right">Available Receipts</th>
+                <th class="text-right">Expenditure</th>
+                <th class="text-right">Closing Balance</th>
+                <th class="text-right">Utilization %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in parking_table %}
+              <tr>
+                <td>{{ row.Financial_Year }}</td>
+                <td>{{ row.Block_Administrative_Centre }}</td>
+                <td><strong>{{ row.Entity_Name }}</strong></td>
+                <td>{{ row.Raw_Scheme }}</td>
+                <td class="text-right">{{ row.Total_Receipt }}</td>
+                <td class="text-right">{{ row.Payment_Expenditure }}</td>
+                <td class="text-right" style="color:var(--red);">{{ row.Closing_Balance }}</td>
+                <td class="text-right"><strong>{{ row.Utilization_Pct }}%</strong></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: YOY MATRIX -->
+    <section id="tab-yoy" class="tab-content">
+      <div class="card">
+        <h3 style="margin-bottom:1rem; color:var(--navy);">Gram Panchayat Expenditure YoY Schedule (Sample 100 Rows)</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                {% for col in yoy_columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in yoy_rows %}
+              <tr>
+                {% for col in yoy_columns %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      event.currentTarget.classList.add('active');
+      window.dispatchEvent(new Event('resize'));
+    }
+  </script>
+</body>
+</html>
