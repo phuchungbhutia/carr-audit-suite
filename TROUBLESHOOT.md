@@ -333,3 +333,49 @@ Remove-Item -Path .\output\* -Recurse -Force -ErrorAction SilentlyContinue
 python run_pipeline.py
 
 ```
+---
+
+## 7. GitHub Pages Deployment & Routing Fixes
+
+### Issue 7.1: GitHub Pages 404 Error (`https://<username>.github.io/<repo>/`)
+* **Symptom:** Navigating to the deployed URL returns a `404 File Not Found` error page.
+* **Root Causes:**
+  1. The entry dashboard file is not named `index.html`.
+  2. GitHub Pages is configured to publish from `/ (root)` instead of `/docs`.
+  3. GitHub's internal Jekyll compiler ignores or misinterprets folders with specific naming conventions.
+  4. The deployment Action workflow has not completed building.
+* **Fix & Automated Terminal Deploy:**
+  Run the following commands in PowerShell to prepare and push the deployment bundle:
+  ```powershell
+  # 1. Ensure docs directory exists
+  New-Item -ItemType Directory -Force -Path docs
+
+  # 2. Copy and rename compiled dashboard to index.html inside docs/
+  Copy-Item output\carr_comparative_dashboard.html docs\index.html -Force
+
+  # 3. Add .nojekyll file to bypass Jekyll processing
+  New-Item -ItemType File -Force -Path docs\.nojekyll
+
+  # 4. Commit and push to GitHub
+  git add docs/
+  git commit -m "docs: deploy dashboard as index.html with .nojekyll"
+  git push origin main
+  ```
+
+Repository Configuration Steps:
+
+Go to your repository on GitHub: https://github.com/phuchungbhutia/carr-audit-suite/settings/pages.
+
+Under Build and deployment:
+
+Source: Deploy from a branch
+
+Branch: main
+
+Folder: /docs
+
+Click Save.
+
+Open the Actions tab (https://github.com/phuchungbhutia/carr-audit-suite/actions) and wait for the pages build and deployment job to show a green checkmark (✔).
+
+Perform a hard refresh in your browser (Ctrl + F5).
